@@ -50,11 +50,22 @@ class Circle:
 
     def calculate_points(self, start_angle: float = 0)-> List[Tuple[float, float]]:
         angle = start_angle
-        angle_step: float = (2*math.pi) / self._points if self._use_points else 2 * math.asin(self._point_distance / (2 * self._radius))
+
+        # Set how much to increase the angle for each iteration based on the calculation mode
+
+        if self._use_points:
+            angle_step: float = (2*math.pi) / self._points
+            points_to_generate = self._points
+        else:
+            angle_step = 2 * math.asin(self._point_distance / (2 * self._radius))
+            points_to_generate = (2 * math.pi) / angle_step
+
+        point_counter = 0
         points: List[Tuple[float, float]] = []
-        while angle - start_angle <= 2 * math.pi:
+        while point_counter < points_to_generate:
             points.append((self._center_x + self._radius * math.cos(angle), self._center_y + self._radius * math.sin(angle)))
             angle += angle_step
+            point_counter += 1
         return points
 
     @property
